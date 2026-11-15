@@ -1,0 +1,12 @@
+#modeChoice{margin:24px 0 30px;padding:18px;border:3px solid var(--cyan);background:#0c1429}#modeCards{display:grid;grid-template-columns:1fr 1fr;gap:15px}#modeCards .tap-choice{padding:18px;border-width:2px}#modeCards b{font:700 11px/1.8 var(--pixel);color:var(--gold)}#modeCards small{font:400 23px/1.3 var(--dialog)}.cadet-locked{opacity:.65}.cadet-locked:after{content:'CREW READY';color:var(--cyan);font:400 12px var(--dialog);margin-top:4px}.part-grade{display:block!important;color:var(--cyan)!important;font-size:15px!important}.shelf-footer{flex-wrap:wrap}.shelf-footer #assemblyAssist{flex-basis:100%}#cadetFeedback{color:var(--cyan);font:400 24px/1.3 var(--dialog)}#modeChoice .field{margin-top:0}#skipConfirm{z-index:100}#skipConfirm strong{color:var(--gold)}@media(max-width:600px){#modeCards{grid-template-columns:1fr}#modeCards .tap-choice{padding:14px}#modeCards b{font-size:10px}#modeCards small{font-size:21px}}
+.shield-lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}.shield-lane{border:2px solid var(--cyan);background:#0c2530;color:var(--ink);padding:16px 8px;font:400 21px var(--dialog)}.shield-lane.hazard{border-color:var(--rose);background:#321426}.shield-lane small{font:700 8px var(--pixel)}.shield-lane b{display:block;font:400 60px var(--dialog);color:var(--gold);margin:25px 0}.shield-lane span{display:block;font:400 17px var(--dialog)}
+
+/* Always-visible remaining budget (budget-badge.js). */
+#budgetBadge{position:fixed;inset:auto 14px 14px auto;margin:0;overflow:visible;z-index:2147483000;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:8px 12px;background:#080b1d;border:2px solid #ffd27a;box-shadow:3px 3px 0 #000;color:#fff;pointer-events:none;font-family:var(--dialog,"Courier New",monospace)}
+#budgetBadge[hidden]{display:none}
+#budgetBadge[popover]:not(:popover-open){display:none}
+#budgetBadge span{font:700 8px/1.6 var(--pixel,"Courier New",monospace);color:#ffd27a;letter-spacing:.5px}
+#budgetBadge strong{font:400 22px/1 var(--dialog,"Courier New",monospace);color:#ffd27a}
+#budgetBadge.low{border-color:#ff7395}
+#budgetBadge.low span,#budgetBadge.low strong{color:#ff9db3}
+@media (max-width:700px){#budgetBadge{inset:8px 8px auto auto;padding:5px 8px}#budgetBadge strong{font-size:17px}}
