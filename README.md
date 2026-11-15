@@ -53,7 +53,7 @@ Standard mode gives you more decisions to make.
 
 - Choose from three equipment levels.
 - Select optional hardware and advanced settings.
-- Complete one calculation during arrival, using the popup calculator if needed.
+- Complete one calculation during arrival, using the pop-up calculator if needed.
 - Choose assisted skipping when it is offered.
 - Handle more emergencies and crew objectives.
 
@@ -126,10 +126,10 @@ These are game prices, not verified prices for real spacecraft equipment.
 
 | Equipment | Price |
 | --- | ---: |
-| Radiation vault | $252 million |
-| Thermal blanket | $95 million |
-| Star tracker | $15 million |
-| Backup computer | $169 million |
+| Radiation vault | 252 million |
+| Thermal blanket | 95 million |
+| Star tracker | 15 million |
+| Backup computer | 169 million |
 
 The starting equipment prices are not randomly multiplied based on your destination. However:
 
