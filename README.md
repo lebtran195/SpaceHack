@@ -126,10 +126,10 @@ These are game prices, not verified prices for real spacecraft equipment.
 
 | Equipment | Price |
 | --- | ---: |
-| Radiation vault | 252 million |
-| Thermal blanket | 95 million |
-| Star tracker | 15 million |
-| Backup computer | 169 million |
+| Radiation vault | 252 |
+| Thermal blanket | 95 |
+| Star tracker | 15  |
+| Backup computer | 169 |
 
 The starting equipment prices are not randomly multiplied based on your destination. However:
 
