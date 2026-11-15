@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 // Background music, controlled by the existing SOUND ON / SOUND OFF button.
 (() => {
-  const music = new Audio(encodeURI('Astronaut Type Beat.mp3'));
+  const music = new Audio(encodeURI("Astronaut Type Beat.mp3"));
   music.loop = true;
   music.volume = 0.35;
-  music.preload = 'auto';
+  music.preload = "auto";
   window.gameMusic = music;
 
-  const soundEnabled = () => typeof soundOn === 'undefined' || soundOn;
+  const soundEnabled = () => typeof soundOn === "undefined" || soundOn;
 
   function play() {
     if (!soundEnabled() || document.hidden) return;
@@ -22,16 +22,22 @@
   }
 
   // Start on the first interaction anywhere on the page.
-  for (const type of ['pointerdown', 'keydown', 'touchstart']) {
-    window.addEventListener(type, () => { if (music.paused) play(); }, { capture: true, passive: true });
+  for (const type of ["pointerdown", "keydown", "touchstart"]) {
+    window.addEventListener(
+      type,
+      () => {
+        if (music.paused) play();
+      },
+      { capture: true, passive: true },
+    );
   }
 
   // The inline handler flips soundOn first; read the new value afterwards.
-  const toggle = document.getElementById('soundToggle');
-  if (toggle) toggle.addEventListener('click', () => setTimeout(sync, 0));
+  const toggle = document.getElementById("soundToggle");
+  if (toggle) toggle.addEventListener("click", () => setTimeout(sync, 0));
 
   // Pause while the tab is hidden, resume when the player returns.
-  document.addEventListener('visibilitychange', () => {
+  document.addEventListener("visibilitychange", () => {
     if (document.hidden) music.pause();
     else sync();
   });

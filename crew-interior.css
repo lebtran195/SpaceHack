@@ -1,5 +1,512 @@
 /* Walkable crew stage: additive pixel panels using the game's existing type and palette. */
-#crewInterior,#crewInteriorTask{border:4px solid var(--line,#eeeaff);border-radius:0;background:var(--panel,#070815);color:var(--ink,#f7f4ff);box-shadow:0 0 0 5px #263b75;max-height:95vh;overflow:auto;padding:16px}#crewInterior{max-width:1120px;width:calc(100% - 28px)}#crewInterior::backdrop,#crewInteriorTask::backdrop{background:#040516e8}#crewInteriorTask{max-width:760px;width:calc(100% - 36px)}.ci-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.ci-kicker{font:9px/1.8 var(--pixel);color:var(--cyan)}.ci-title{font:clamp(12px,2vw,18px)/1.7 var(--pixel);margin:4px 0 9px;color:var(--gold)}.ci-layout{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:15px}.ci-map-frame{border:3px solid #7584af;background:#050811}.ci-canvas{display:block;width:100%;aspect-ratio:12/7;image-rendering:pixelated;touch-action:none;cursor:crosshair}.ci-help,.ci-model{font:18px/1.2 var(--dialog);color:#b8cbea;margin:8px 0}.ci-model{font-size:16px}.ci-hud{display:flex;gap:13px;flex-wrap:wrap;padding:10px 0;color:var(--gold);font:20px/1.2 var(--dialog)}.ci-status{min-height:43px;border-left:3px solid var(--cyan);background:#10162d;padding:9px 11px;font:20px/1.2 var(--dialog);margin:8px 0;color:var(--ink)}.ci-mission-log{border:2px solid #485076;background:#0c1025;padding:11px}.ci-mission-log h3{font:9px/1.8 var(--pixel);color:var(--cyan);margin:0 0 9px}.ci-objective{display:block;width:100%;text-align:left;color:var(--ink);background:#111731;border:2px solid #485076;padding:9px;margin-bottom:8px;font:18px/1.2 var(--dialog)}.ci-objective.done{border-color:var(--green);color:var(--green)}.ci-objective small{display:block;color:#a6b1da;margin-top:4px;font-size:16px}.ci-objective.tracked{outline:2px solid var(--gold)}.ci-controls{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:8px}.ci-dpad{display:grid;grid-template-columns:repeat(3,43px);grid-template-rows:repeat(2,39px);gap:5px;touch-action:none}.ci-dpad button{background:#171d4a;border:2px solid white;color:white;font:18px monospace;touch-action:none}.ci-dpad [data-ci-direction=up]{grid-column:2}.ci-dpad [data-ci-direction=left]{grid-column:1;grid-row:2}.ci-dpad [data-ci-direction=down]{grid-column:2;grid-row:2}.ci-dpad [data-ci-direction=right]{grid-column:3;grid-row:2}.ci-task-actions{display:flex;gap:9px;flex-wrap:wrap;margin:13px 0}.ci-task-actions button{flex:1;min-width:150px}.ci-support{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.ci-support button{text-align:left;display:block}.ci-support small{display:block;font:18px/1.25 var(--dialog);margin-top:6px;color:#c9d1ea}.ci-task-text{font:22px/1.25 var(--dialog);color:#d7e6fc}.ci-evidence{padding:11px;border:2px dashed #687c9b;background:#0d1630;color:#c9e4fd;font:21px/1.25 var(--dialog);margin:12px 0}.ci-puzzle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ci-puzzle-card{border:2px solid #7584af;background:#131b35;color:white;padding:13px;font:20px/1.2 var(--dialog);min-height:68px}.ci-puzzle-card strong{display:block;color:var(--gold);font-size:24px;margin:6px 0}.ci-puzzle-card.checked{border-color:var(--green);background:#0d3128}.ci-puzzle-card.selected{outline:2px solid var(--gold)}.ci-task-feedback{font:21px/1.3 var(--dialog);color:var(--green);margin:13px 0}.ci-task-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;border-top:1px solid #485076;padding-top:12px;margin-top:15px}.ci-task-footer button{font-size:8px}.ci-completed{border:2px solid var(--green);padding:12px;background:#0b2525}.ci-completed p{font:21px/1.3 var(--dialog);color:#baffd5}.ci-cooperation{font:18px/1.3 var(--dialog);color:#b8cbea}.ci-skip-price{font:20px/1.3 var(--dialog);color:var(--rose)}#crewInteriorTask .solver-scene{margin-top:10px}@media(max-width:800px){.ci-layout{grid-template-columns:1fr}.ci-mission-log{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.ci-mission-log h3,.ci-mission-log .ci-cooperation{grid-column:1/-1}.ci-objective{margin:0}.ci-canvas{min-height:240px}.ci-title{font-size:13px}}@media(max-width:500px){#crewInterior,#crewInteriorTask{padding:10px;width:calc(100% - 18px)}.ci-support,.ci-puzzle-grid{grid-template-columns:1fr}.ci-task-text{font-size:20px}.ci-controls .btn{font-size:8px}.ci-objective{font-size:17px}.ci-hud{font-size:18px;gap:9px}.ci-canvas{min-height:0}.ci-task-actions button{min-width:115px}.ci-dpad{grid-template-columns:repeat(3,39px)}}
+#crewInterior,
+#crewInteriorTask {
+  border: 4px solid var(--line, #eeeaff);
+  border-radius: 0;
+  background: var(--panel, #070815);
+  color: var(--ink, #f7f4ff);
+  box-shadow: 0 0 0 5px #263b75;
+  max-height: 95vh;
+  overflow: auto;
+  padding: 16px;
+}
+#crewInterior {
+  max-width: 1120px;
+  width: calc(100% - 28px);
+}
+#crewInterior::backdrop,
+#crewInteriorTask::backdrop {
+  background: #040516e8;
+}
+#crewInteriorTask {
+  max-width: 760px;
+  width: calc(100% - 36px);
+}
+.ci-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.ci-kicker {
+  font: 9px/1.8 var(--pixel);
+  color: var(--cyan);
+}
+.ci-title {
+  font: clamp(12px, 2vw, 18px)/1.7 var(--pixel);
+  margin: 4px 0 9px;
+  color: var(--gold);
+}
+.ci-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 245px;
+  gap: 15px;
+}
+.ci-map-frame {
+  border: 3px solid #7584af;
+  background: #050811;
+}
+.ci-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 12/7;
+  image-rendering: pixelated;
+  touch-action: none;
+  cursor: crosshair;
+}
+.ci-help,
+.ci-model {
+  font: 18px/1.2 var(--dialog);
+  color: #b8cbea;
+  margin: 8px 0;
+}
+.ci-model {
+  font-size: 16px;
+}
+.ci-hud {
+  display: flex;
+  gap: 13px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  color: var(--gold);
+  font: 20px/1.2 var(--dialog);
+}
+.ci-status {
+  min-height: 43px;
+  border-left: 3px solid var(--cyan);
+  background: #10162d;
+  padding: 9px 11px;
+  font: 20px/1.2 var(--dialog);
+  margin: 8px 0;
+  color: var(--ink);
+}
+.ci-mission-log {
+  border: 2px solid #485076;
+  background: #0c1025;
+  padding: 11px;
+}
+.ci-mission-log h3 {
+  font: 9px/1.8 var(--pixel);
+  color: var(--cyan);
+  margin: 0 0 9px;
+}
+.ci-objective {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: var(--ink);
+  background: #111731;
+  border: 2px solid #485076;
+  padding: 9px;
+  margin-bottom: 8px;
+  font: 18px/1.2 var(--dialog);
+}
+.ci-objective.done {
+  border-color: var(--green);
+  color: var(--green);
+}
+.ci-objective small {
+  display: block;
+  color: #a6b1da;
+  margin-top: 4px;
+  font-size: 16px;
+}
+.ci-objective.tracked {
+  outline: 2px solid var(--gold);
+}
+.ci-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.ci-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 43px);
+  grid-template-rows: repeat(2, 39px);
+  gap: 5px;
+  touch-action: none;
+}
+.ci-dpad button {
+  background: #171d4a;
+  border: 2px solid white;
+  color: white;
+  font: 18px monospace;
+  touch-action: none;
+}
+.ci-dpad [data-ci-direction="up"] {
+  grid-column: 2;
+}
+.ci-dpad [data-ci-direction="left"] {
+  grid-column: 1;
+  grid-row: 2;
+}
+.ci-dpad [data-ci-direction="down"] {
+  grid-column: 2;
+  grid-row: 2;
+}
+.ci-dpad [data-ci-direction="right"] {
+  grid-column: 3;
+  grid-row: 2;
+}
+.ci-task-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 13px 0;
+}
+.ci-task-actions button {
+  flex: 1;
+  min-width: 150px;
+}
+.ci-support {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.ci-support button {
+  text-align: left;
+  display: block;
+}
+.ci-support small {
+  display: block;
+  font: 18px/1.25 var(--dialog);
+  margin-top: 6px;
+  color: #c9d1ea;
+}
+.ci-task-text {
+  font: 22px/1.25 var(--dialog);
+  color: #d7e6fc;
+}
+.ci-evidence {
+  padding: 11px;
+  border: 2px dashed #687c9b;
+  background: #0d1630;
+  color: #c9e4fd;
+  font: 21px/1.25 var(--dialog);
+  margin: 12px 0;
+}
+.ci-puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.ci-puzzle-card {
+  border: 2px solid #7584af;
+  background: #131b35;
+  color: white;
+  padding: 13px;
+  font: 20px/1.2 var(--dialog);
+  min-height: 68px;
+}
+.ci-puzzle-card strong {
+  display: block;
+  color: var(--gold);
+  font-size: 24px;
+  margin: 6px 0;
+}
+.ci-puzzle-card.checked {
+  border-color: var(--green);
+  background: #0d3128;
+}
+.ci-puzzle-card.selected {
+  outline: 2px solid var(--gold);
+}
+.ci-task-feedback {
+  font: 21px/1.3 var(--dialog);
+  color: var(--green);
+  margin: 13px 0;
+}
+.ci-task-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-top: 1px solid #485076;
+  padding-top: 12px;
+  margin-top: 15px;
+}
+.ci-task-footer button {
+  font-size: 8px;
+}
+.ci-completed {
+  border: 2px solid var(--green);
+  padding: 12px;
+  background: #0b2525;
+}
+.ci-completed p {
+  font: 21px/1.3 var(--dialog);
+  color: #baffd5;
+}
+.ci-cooperation {
+  font: 18px/1.3 var(--dialog);
+  color: #b8cbea;
+}
+.ci-skip-price {
+  font: 20px/1.3 var(--dialog);
+  color: var(--rose);
+}
+#crewInteriorTask .solver-scene {
+  margin-top: 10px;
+}
+@media (max-width: 800px) {
+  .ci-layout {
+    grid-template-columns: 1fr;
+  }
+  .ci-mission-log {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+  }
+  .ci-mission-log h3,
+  .ci-mission-log .ci-cooperation {
+    grid-column: 1/-1;
+  }
+  .ci-objective {
+    margin: 0;
+  }
+  .ci-canvas {
+    min-height: 240px;
+  }
+  .ci-title {
+    font-size: 13px;
+  }
+}
+@media (max-width: 500px) {
+  #crewInterior,
+  #crewInteriorTask {
+    padding: 10px;
+    width: calc(100% - 18px);
+  }
+  .ci-support,
+  .ci-puzzle-grid {
+    grid-template-columns: 1fr;
+  }
+  .ci-task-text {
+    font-size: 20px;
+  }
+  .ci-controls .btn {
+    font-size: 8px;
+  }
+  .ci-objective {
+    font-size: 17px;
+  }
+  .ci-hud {
+    font-size: 18px;
+    gap: 9px;
+  }
+  .ci-canvas {
+    min-height: 0;
+  }
+  .ci-task-actions button {
+    min-width: 115px;
+  }
+  .ci-dpad {
+    grid-template-columns: repeat(3, 39px);
+  }
+}
 
 /* Mission selection stays compact beside the ship; the journal expands for details. */
-#crewInterior{max-width:1260px}.ci-layout{grid-template-columns:minmax(0,1fr) 315px;align-items:start}.ci-top-actions{display:flex;gap:9px;flex-wrap:wrap}.ci-mission-log.cml-inline{padding:0;display:block}.ci-mission-log.cml-inline .cml-detail{display:none}.ci-mission-log.cml-inline .cml-filters{display:none}.ci-mission-log.cml-inline .cml-list{max-height:none}.ci-mission-log.cml-inline .cml-mission-card{padding:12px}.ci-mission-log.cml-inline .cml-card-title{font-size:24px}.ci-mission-log.cml-inline .cml-heading{padding:13px}.ci-mission-log.cml-inline .cml-eyebrow{font-size:7px}.ci-mission-log.cml-inline .cml-list-panel{border-bottom:0}.ci-mission-log.cml-inline .cml-browser{grid-template-columns:1fr}.ci-mission-log.cml-inline .cml-list-panel{border-right:0}.ci-hud{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.ci-meter{min-width:0;font:17px/1.2 var(--dialog);color:#b9c6de}.ci-meter>span{display:flex;gap:8px;justify-content:space-between}.ci-meter b{color:white}.ci-meter>div{height:7px;border:1px solid #536584;background:#131d34;margin-top:5px}.ci-meter i{display:block;height:100%;max-width:100%}.ci-duty{grid-column:1/-1;display:flex;justify-content:space-between;gap:12px;font:19px/1.2 var(--dialog);color:#a9bfd9}.ci-duty strong{color:var(--gold);font-weight:400}.ci-decision{border:2px solid #ed9258;padding:17px;margin-top:18px;background:#14182c}.ci-decision>span{display:inline-block;color:#101521;background:#ed9258;padding:7px 12px;font:8px/1.6 var(--pixel);margin-top:-32px;vertical-align:top}.ci-decision>p{color:#e2dded;font:23px/1.3 var(--dialog);margin:8px 0 14px}.ci-decision .ci-support{margin-top:10px}.ci-decision .ci-support button{min-height:112px;padding:14px;font-size:9px;line-height:1.8}.ci-decision .ci-support small{font-size:20px;line-height:1.2;color:#d0d7e8;margin-top:9px}.ci-decision .ci-support .green small{color:#b5f6d2}.ci-report-journal{border-top:1px solid #354772;margin-top:12px;padding-top:5px}.ci-report-badges{display:flex;flex-wrap:wrap;gap:8px}.ci-report-badges span{border:1px solid #d6ac55;padding:7px 10px;color:#ffcd65;font:20px/1.2 var(--dialog);background:#24253c}@media(max-width:950px){.ci-layout{grid-template-columns:minmax(0,1fr) 270px}.ci-mission-log.cml-inline .cml-card-title{font-size:21px}}@media(max-width:800px){.ci-layout{grid-template-columns:1fr}.ci-mission-log.cml-inline{display:block}.ci-mission-log.cml-inline .cml-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.ci-mission-log.cml-inline .cml-card-title{font-size:21px}.ci-mission-log.cml-inline .cml-heading{flex-direction:row}.ci-mission-log.cml-inline .cml-summary{justify-content:flex-start}.ci-canvas{min-height:0}}@media(max-width:520px){.ci-mission-log.cml-inline .cml-list{grid-template-columns:1fr}.ci-hud{gap:8px}.ci-meter{font-size:15px}.ci-top-actions .btn{font-size:7px}.ci-decision .ci-support{grid-template-columns:1fr}.ci-decision>span{font-size:7px}.ci-duty{font-size:17px}}
+#crewInterior {
+  max-width: 1260px;
+}
+.ci-layout {
+  grid-template-columns: minmax(0, 1fr) 315px;
+  align-items: start;
+}
+.ci-top-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.ci-mission-log.cml-inline {
+  padding: 0;
+  display: block;
+}
+.ci-mission-log.cml-inline .cml-detail {
+  display: none;
+}
+.ci-mission-log.cml-inline .cml-filters {
+  display: none;
+}
+.ci-mission-log.cml-inline .cml-list {
+  max-height: none;
+}
+.ci-mission-log.cml-inline .cml-mission-card {
+  padding: 12px;
+}
+.ci-mission-log.cml-inline .cml-card-title {
+  font-size: 24px;
+}
+.ci-mission-log.cml-inline .cml-heading {
+  padding: 13px;
+}
+.ci-mission-log.cml-inline .cml-eyebrow {
+  font-size: 7px;
+}
+.ci-mission-log.cml-inline .cml-list-panel {
+  border-bottom: 0;
+}
+.ci-mission-log.cml-inline .cml-browser {
+  grid-template-columns: 1fr;
+}
+.ci-mission-log.cml-inline .cml-list-panel {
+  border-right: 0;
+}
+.ci-hud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.ci-meter {
+  min-width: 0;
+  font: 17px/1.2 var(--dialog);
+  color: #b9c6de;
+}
+.ci-meter > span {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.ci-meter b {
+  color: white;
+}
+.ci-meter > div {
+  height: 7px;
+  border: 1px solid #536584;
+  background: #131d34;
+  margin-top: 5px;
+}
+.ci-meter i {
+  display: block;
+  height: 100%;
+  max-width: 100%;
+}
+.ci-duty {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font: 19px/1.2 var(--dialog);
+  color: #a9bfd9;
+}
+.ci-duty strong {
+  color: var(--gold);
+  font-weight: 400;
+}
+.ci-decision {
+  border: 2px solid #ed9258;
+  padding: 17px;
+  margin-top: 18px;
+  background: #14182c;
+}
+.ci-decision > span {
+  display: inline-block;
+  color: #101521;
+  background: #ed9258;
+  padding: 7px 12px;
+  font: 8px/1.6 var(--pixel);
+  margin-top: -32px;
+  vertical-align: top;
+}
+.ci-decision > p {
+  color: #e2dded;
+  font: 23px/1.3 var(--dialog);
+  margin: 8px 0 14px;
+}
+.ci-decision .ci-support {
+  margin-top: 10px;
+}
+.ci-decision .ci-support button {
+  min-height: 112px;
+  padding: 14px;
+  font-size: 9px;
+  line-height: 1.8;
+}
+.ci-decision .ci-support small {
+  font-size: 20px;
+  line-height: 1.2;
+  color: #d0d7e8;
+  margin-top: 9px;
+}
+.ci-decision .ci-support .green small {
+  color: #b5f6d2;
+}
+.ci-report-journal {
+  border-top: 1px solid #354772;
+  margin-top: 12px;
+  padding-top: 5px;
+}
+.ci-report-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ci-report-badges span {
+  border: 1px solid #d6ac55;
+  padding: 7px 10px;
+  color: #ffcd65;
+  font: 20px/1.2 var(--dialog);
+  background: #24253c;
+}
+@media (max-width: 950px) {
+  .ci-layout {
+    grid-template-columns: minmax(0, 1fr) 270px;
+  }
+  .ci-mission-log.cml-inline .cml-card-title {
+    font-size: 21px;
+  }
+}
+@media (max-width: 800px) {
+  .ci-layout {
+    grid-template-columns: 1fr;
+  }
+  .ci-mission-log.cml-inline {
+    display: block;
+  }
+  .ci-mission-log.cml-inline .cml-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+  .ci-mission-log.cml-inline .cml-card-title {
+    font-size: 21px;
+  }
+  .ci-mission-log.cml-inline .cml-heading {
+    flex-direction: row;
+  }
+  .ci-mission-log.cml-inline .cml-summary {
+    justify-content: flex-start;
+  }
+  .ci-canvas {
+    min-height: 0;
+  }
+}
+@media (max-width: 520px) {
+  .ci-mission-log.cml-inline .cml-list {
+    grid-template-columns: 1fr;
+  }
+  .ci-hud {
+    gap: 8px;
+  }
+  .ci-meter {
+    font-size: 15px;
+  }
+  .ci-top-actions .btn {
+    font-size: 7px;
+  }
+  .ci-decision .ci-support {
+    grid-template-columns: 1fr;
+  }
+  .ci-decision > span {
+    font-size: 7px;
+  }
+  .ci-duty {
+    font-size: 17px;
+  }
+}

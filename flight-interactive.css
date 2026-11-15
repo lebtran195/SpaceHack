@@ -1,21 +1,206 @@
 /* Additive flight interaction layer. Uses the existing pixel RPG palette and controls. */
-#interactiveFlight{border:5px solid white;background:#060818;color:var(--ink);box-shadow:0 0 0 5px #263b75;max-width:920px;width:calc(100% - 28px);max-height:94vh;padding:18px;overflow:auto;border-radius:0}#interactiveFlight::backdrop{background:#040516f5}#interactiveFlight h2{font:clamp(11px,2vw,17px)/1.7 var(--pixel);color:var(--gold);margin:0 0 9px}#interactiveFlight p{font:21px/1.2 var(--dialog);color:#d7e6fc;margin:8px 0}#interactiveFlight .if-head{display:flex;justify-content:space-between;gap:15px;align-items:center}#interactiveFlight .if-phase{font:9px/1.8 var(--pixel);color:var(--cyan)}#interactiveFlight .if-canvas{display:block;width:100%;aspect-ratio:2/1;border:3px solid #8d94c6;background:#050d1d;image-rendering:pixelated}#interactiveFlight .if-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0 8px}#interactiveFlight .if-controls button{min-height:51px;touch-action:manipulation}#interactiveFlight .if-hud{display:flex;justify-content:space-between;gap:9px;flex-wrap:wrap;font:19px/1.2 var(--dialog);color:var(--cyan);margin:8px 0}#interactiveFlight .if-note{font-size:17px;color:#b8cbea}#interactiveFlight .if-feedback{border-left:4px solid var(--green);background:#0d252a;padding:10px 13px;margin-top:11px}#interactiveFlight .if-event{border:3px solid var(--rose);background:#280916;padding:12px;margin-top:12px}#interactiveFlight .if-event h3{font:11px/1.7 var(--pixel);color:var(--rose);margin:0 0 8px}#interactiveFlight .if-event button{margin:6px 8px 0 0}#interactiveFlight .if-step{font:9px/1.5 var(--pixel);color:#b8cbea}#interactiveFlight .if-hold{background:#793964}#interactiveFlight .if-hold[aria-pressed=true]{background:#14553b;color:var(--green)}#interactiveFlight .if-legend{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:17px/1.2 var(--dialog);color:#b8cbea}#interactiveFlight .if-vitals{display:flex;gap:14px;flex-wrap:wrap;color:#ffcd65;font-size:19px}#interactiveFlight .if-events{margin-top:10px}#interactiveFlight .if-hidden{display:none!important}@media(max-width:600px){#interactiveFlight{padding:10px;border-width:3px}#interactiveFlight .if-head{align-items:flex-start}#interactiveFlight .if-canvas{aspect-ratio:1.6}#interactiveFlight p{font-size:19px}#interactiveFlight .if-controls button{font-size:8px;padding:9px}#interactiveFlight .if-phase{font-size:7px}}
+#interactiveFlight {
+  border: 5px solid white;
+  background: #060818;
+  color: var(--ink);
+  box-shadow: 0 0 0 5px #263b75;
+  max-width: 920px;
+  width: calc(100% - 28px);
+  max-height: 94vh;
+  padding: 18px;
+  overflow: auto;
+  border-radius: 0;
+}
+#interactiveFlight::backdrop {
+  background: #040516f5;
+}
+#interactiveFlight h2 {
+  font: clamp(11px, 2vw, 17px)/1.7 var(--pixel);
+  color: var(--gold);
+  margin: 0 0 9px;
+}
+#interactiveFlight p {
+  font: 21px/1.2 var(--dialog);
+  color: #d7e6fc;
+  margin: 8px 0;
+}
+#interactiveFlight .if-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  align-items: center;
+}
+#interactiveFlight .if-phase {
+  font: 9px/1.8 var(--pixel);
+  color: var(--cyan);
+}
+#interactiveFlight .if-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2/1;
+  border: 3px solid #8d94c6;
+  background: #050d1d;
+  image-rendering: pixelated;
+}
+#interactiveFlight .if-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0 8px;
+}
+#interactiveFlight .if-controls button {
+  min-height: 51px;
+  touch-action: manipulation;
+}
+#interactiveFlight .if-hud {
+  display: flex;
+  justify-content: space-between;
+  gap: 9px;
+  flex-wrap: wrap;
+  font: 19px/1.2 var(--dialog);
+  color: var(--cyan);
+  margin: 8px 0;
+}
+#interactiveFlight .if-note {
+  font-size: 17px;
+  color: #b8cbea;
+}
+#interactiveFlight .if-feedback {
+  border-left: 4px solid var(--green);
+  background: #0d252a;
+  padding: 10px 13px;
+  margin-top: 11px;
+}
+#interactiveFlight .if-event {
+  border: 3px solid var(--rose);
+  background: #280916;
+  padding: 12px;
+  margin-top: 12px;
+}
+#interactiveFlight .if-event h3 {
+  font: 11px/1.7 var(--pixel);
+  color: var(--rose);
+  margin: 0 0 8px;
+}
+#interactiveFlight .if-event button {
+  margin: 6px 8px 0 0;
+}
+#interactiveFlight .if-step {
+  font: 9px/1.5 var(--pixel);
+  color: #b8cbea;
+}
+#interactiveFlight .if-hold {
+  background: #793964;
+}
+#interactiveFlight .if-hold[aria-pressed="true"] {
+  background: #14553b;
+  color: var(--green);
+}
+#interactiveFlight .if-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font: 17px/1.2 var(--dialog);
+  color: #b8cbea;
+}
+#interactiveFlight .if-vitals {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: #ffcd65;
+  font-size: 19px;
+}
+#interactiveFlight .if-events {
+  margin-top: 10px;
+}
+#interactiveFlight .if-hidden {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  #interactiveFlight {
+    padding: 10px;
+    border-width: 3px;
+  }
+  #interactiveFlight .if-head {
+    align-items: flex-start;
+  }
+  #interactiveFlight .if-canvas {
+    aspect-ratio: 1.6;
+  }
+  #interactiveFlight p {
+    font-size: 19px;
+  }
+  #interactiveFlight .if-controls button {
+    font-size: 8px;
+    padding: 9px;
+  }
+  #interactiveFlight .if-phase {
+    font-size: 7px;
+  }
+}
 
 /* Compact emergency layout: scene, hint, alert, timer and choices fit on one screen. */
-#screen-flight .scene{height:190px}
-#screen-flight .pilot-dialogue{min-height:0;padding:8px 12px;margin-top:10px}
-#screen-flight .pilot-dialogue .mini-avatar{width:46px;height:54px}
-#screen-flight .hint-card{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 0;padding:8px 12px}
-#screen-flight .hint-card .hint-title{margin:0;flex:none}
-#screen-flight .hint-card p{flex:1 1 220px;margin:0}
-#screen-flight .hint-card .hint-actions{flex:none}
-#screen-flight .system-message{margin-top:10px;padding:10px 14px}
-#screen-flight .timer-row{margin:10px 0 2px}
-#screen-flight #eventIndex{margin-top:4px!important}
-#screen-flight .actions{margin-top:8px}
-#screen-flight .action{padding:10px 12px}
-#logItems{max-height:260px;overflow-y:auto;padding-right:6px}
-@media (min-width:900px){
- #screen-flight .actions{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
- #screen-flight .flight-layout>aside{position:sticky;top:12px;align-self:start}
+#screen-flight .scene {
+  height: 190px;
+}
+#screen-flight .pilot-dialogue {
+  min-height: 0;
+  padding: 8px 12px;
+  margin-top: 10px;
+}
+#screen-flight .pilot-dialogue .mini-avatar {
+  width: 46px;
+  height: 54px;
+}
+#screen-flight .hint-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+}
+#screen-flight .hint-card .hint-title {
+  margin: 0;
+  flex: none;
+}
+#screen-flight .hint-card p {
+  flex: 1 1 220px;
+  margin: 0;
+}
+#screen-flight .hint-card .hint-actions {
+  flex: none;
+}
+#screen-flight .system-message {
+  margin-top: 10px;
+  padding: 10px 14px;
+}
+#screen-flight .timer-row {
+  margin: 10px 0 2px;
+}
+#screen-flight #eventIndex {
+  margin-top: 4px !important;
+}
+#screen-flight .actions {
+  margin-top: 8px;
+}
+#screen-flight .action {
+  padding: 10px 12px;
+}
+#logItems {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+@media (min-width: 900px) {
+  #screen-flight .actions {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  #screen-flight .flight-layout > aside {
+    position: sticky;
+    top: 12px;
+    align-self: start;
+  }
 }

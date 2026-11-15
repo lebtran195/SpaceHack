@@ -1,13 +1,219 @@
 /* Keypad dialog deliberately uses the existing dark pixel theme and square controls. */
-#keypadCalculator{width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:18px;background:#080b1d;color:#f7f4ff;border:3px solid white;border-radius:0;box-shadow:6px 6px 0 #232544;font-family:var(--dialog,"Courier New",monospace)}#keypadCalculator::backdrop{background:#01020bbd}.calculator-pad-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.calculator-pad-heading h2{margin:0;color:var(--cyan,#5ceaff);font:700 12px/1.8 var(--pixel,"Courier New",monospace)}#keypadCalculator .calculator-pad-close{min-height:38px;min-width:38px;background:#17172f;border:2px solid white;color:white;cursor:pointer}.calculator-pad-help{font:400 20px/1.2 var(--dialog,"Courier New",monospace);margin:10px 0 13px;color:#c9c5df}.calculator-pad-screen{border:2px solid #6579a5;background:#10152c;padding:11px;margin-bottom:14px}.calculator-pad-screen label{display:block;color:#a7b2d7;font:700 8px/1.8 var(--pixel,"Courier New",monospace);margin-bottom:8px}#calculatorPadExpression{display:block;width:100%;border:0;border-radius:0;background:#10152c;color:white;font:400 27px/1.1 var(--dialog,"Courier New",monospace);padding:3px 0;box-shadow:none}#calculatorPadResult{display:block;color:var(--cyan,#5ceaff);min-height:31px;overflow-wrap:anywhere;font:400 25px/1.2 var(--dialog,"Courier New",monospace);margin-top:7px}.calculator-pad-keys{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.calculator-pad-keys button{min-height:56px;min-width:0;border:2px solid white;border-radius:0;background:#17172f;color:#fff;font:400 28px/1 var(--dialog,"Courier New",monospace);box-shadow:2px 2px 0 #000;cursor:pointer;touch-action:manipulation}.calculator-pad-keys [data-calculator-key="0"]{grid-column:span 3}.calculator-pad-keys [data-calculator-key="."]{grid-column:span 2}.calculator-pad-keys .calculator-pad-operator{background:#472347;color:#ffbbd1}.calculator-pad-keys .calculator-pad-equals{background:#5639b3;color:white}.calculator-pad-keys button:hover,#keypadCalculator .calculator-pad-close:hover{background:var(--cyan,#5ceaff);color:#070910}.calculator-pad-keys button:active{transform:translate(1px,1px);box-shadow:none}.calculator-pad-keys button:focus-visible,#keypadCalculator button:focus-visible{outline:3px solid var(--gold,#ffcd65);outline-offset:2px}.calculator-pad-error{color:#ffb5ca;min-height:22px;margin:12px 0 8px;font:400 18px/1.2 var(--dialog,"Courier New",monospace)}#calculatorPadApply{width:100%;min-height:49px;border:2px solid white;border-radius:0;background:#14553b;color:white;font:700 10px/1.8 var(--pixel,"Courier New",monospace);cursor:pointer}#calculatorPadApply:disabled{opacity:.4;cursor:not-allowed}.calculator-pad-unit{margin:10px 0 0;color:#b5b8d5;font:400 17px/1.2 var(--dialog,"Courier New",monospace)}.calculator-pad .calculator-keypad-launch{display:block;width:100%;margin-top:3px;border:2px solid white;border-radius:0;background:#5639b3;color:white;padding:11px 14px;min-height:47px;font:700 9px/1.8 var(--pixel,"Courier New",monospace);cursor:pointer}.calculator-pad .calculator-keypad-launch:hover{background:var(--cyan,#5ceaff);color:#060916}.calculator-pad>small{margin-top:9px}@media(max-width:360px){#keypadCalculator{padding:12px}.calculator-pad-keys{gap:6px}.calculator-pad-keys button{min-height:50px;font-size:25px}.calculator-pad-heading h2{font-size:10px}}
+#keypadCalculator {
+  width: min(440px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  padding: 18px;
+  background: #080b1d;
+  color: #f7f4ff;
+  border: 3px solid white;
+  border-radius: 0;
+  box-shadow: 6px 6px 0 #232544;
+  font-family: var(--dialog, "Courier New", monospace);
+}
+#keypadCalculator::backdrop {
+  background: #01020bbd;
+}
+.calculator-pad-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.calculator-pad-heading h2 {
+  margin: 0;
+  color: var(--cyan, #5ceaff);
+  font: 700 12px/1.8 var(--pixel, "Courier New", monospace);
+}
+#keypadCalculator .calculator-pad-close {
+  min-height: 38px;
+  min-width: 38px;
+  background: #17172f;
+  border: 2px solid white;
+  color: white;
+  cursor: pointer;
+}
+.calculator-pad-help {
+  font: 400 20px/1.2 var(--dialog, "Courier New", monospace);
+  margin: 10px 0 13px;
+  color: #c9c5df;
+}
+.calculator-pad-screen {
+  border: 2px solid #6579a5;
+  background: #10152c;
+  padding: 11px;
+  margin-bottom: 14px;
+}
+.calculator-pad-screen label {
+  display: block;
+  color: #a7b2d7;
+  font: 700 8px/1.8 var(--pixel, "Courier New", monospace);
+  margin-bottom: 8px;
+}
+#calculatorPadExpression {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: #10152c;
+  color: white;
+  font: 400 27px/1.1 var(--dialog, "Courier New", monospace);
+  padding: 3px 0;
+  box-shadow: none;
+}
+#calculatorPadResult {
+  display: block;
+  color: var(--cyan, #5ceaff);
+  min-height: 31px;
+  overflow-wrap: anywhere;
+  font: 400 25px/1.2 var(--dialog, "Courier New", monospace);
+  margin-top: 7px;
+}
+.calculator-pad-keys {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+.calculator-pad-keys button {
+  min-height: 56px;
+  min-width: 0;
+  border: 2px solid white;
+  border-radius: 0;
+  background: #17172f;
+  color: #fff;
+  font: 400 28px/1 var(--dialog, "Courier New", monospace);
+  box-shadow: 2px 2px 0 #000;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.calculator-pad-keys [data-calculator-key="0"] {
+  grid-column: span 3;
+}
+.calculator-pad-keys [data-calculator-key="."] {
+  grid-column: span 2;
+}
+.calculator-pad-keys .calculator-pad-operator {
+  background: #472347;
+  color: #ffbbd1;
+}
+.calculator-pad-keys .calculator-pad-equals {
+  background: #5639b3;
+  color: white;
+}
+.calculator-pad-keys button:hover,
+#keypadCalculator .calculator-pad-close:hover {
+  background: var(--cyan, #5ceaff);
+  color: #070910;
+}
+.calculator-pad-keys button:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+.calculator-pad-keys button:focus-visible,
+#keypadCalculator button:focus-visible {
+  outline: 3px solid var(--gold, #ffcd65);
+  outline-offset: 2px;
+}
+.calculator-pad-error {
+  color: #ffb5ca;
+  min-height: 22px;
+  margin: 12px 0 8px;
+  font: 400 18px/1.2 var(--dialog, "Courier New", monospace);
+}
+#calculatorPadApply {
+  width: 100%;
+  min-height: 49px;
+  border: 2px solid white;
+  border-radius: 0;
+  background: #14553b;
+  color: white;
+  font: 700 10px/1.8 var(--pixel, "Courier New", monospace);
+  cursor: pointer;
+}
+#calculatorPadApply:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.calculator-pad-unit {
+  margin: 10px 0 0;
+  color: #b5b8d5;
+  font: 400 17px/1.2 var(--dialog, "Courier New", monospace);
+}
+.calculator-pad .calculator-keypad-launch {
+  display: block;
+  width: 100%;
+  margin-top: 3px;
+  border: 2px solid white;
+  border-radius: 0;
+  background: #5639b3;
+  color: white;
+  padding: 11px 14px;
+  min-height: 47px;
+  font: 700 9px/1.8 var(--pixel, "Courier New", monospace);
+  cursor: pointer;
+}
+.calculator-pad .calculator-keypad-launch:hover {
+  background: var(--cyan, #5ceaff);
+  color: #060916;
+}
+.calculator-pad > small {
+  margin-top: 9px;
+}
+@media (max-width: 360px) {
+  #keypadCalculator {
+    padding: 12px;
+  }
+  .calculator-pad-keys {
+    gap: 6px;
+  }
+  .calculator-pad-keys button {
+    min-height: 50px;
+    font-size: 25px;
+  }
+  .calculator-pad-heading h2 {
+    font-size: 10px;
+  }
+}
 
 /* Dock the calculator on the left so the problem's numbers and formula stay readable behind it. */
-#keypadCalculator{position:fixed;inset:12px auto 12px 12px;margin:0;width:min(340px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:14px}
-#keypadCalculator::backdrop{background:transparent}
-#keypadCalculator .calculator-pad-help{font-size:17px;margin:6px 0 8px}
-#keypadCalculator .calculator-pad-screen{padding:8px;margin-bottom:10px}
-#keypadCalculator #calculatorPadExpression{font-size:23px}
-#keypadCalculator #calculatorPadResult{font-size:21px;min-height:26px}
-#keypadCalculator .calculator-pad-keys{gap:6px}
-#keypadCalculator .calculator-pad-keys button{min-height:46px;padding:4px;font-size:20px}
-@media (max-width:700px){#keypadCalculator{inset:auto 8px 8px 8px;width:auto;max-height:62dvh}}
+#keypadCalculator {
+  position: fixed;
+  inset: 12px auto 12px 12px;
+  margin: 0;
+  width: min(340px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 14px;
+}
+#keypadCalculator::backdrop {
+  background: transparent;
+}
+#keypadCalculator .calculator-pad-help {
+  font-size: 17px;
+  margin: 6px 0 8px;
+}
+#keypadCalculator .calculator-pad-screen {
+  padding: 8px;
+  margin-bottom: 10px;
+}
+#keypadCalculator #calculatorPadExpression {
+  font-size: 23px;
+}
+#keypadCalculator #calculatorPadResult {
+  font-size: 21px;
+  min-height: 26px;
+}
+#keypadCalculator .calculator-pad-keys {
+  gap: 6px;
+}
+#keypadCalculator .calculator-pad-keys button {
+  min-height: 46px;
+  padding: 4px;
+  font-size: 20px;
+}
+@media (max-width: 700px) {
+  #keypadCalculator {
+    inset: auto 8px 8px 8px;
+    width: auto;
+    max-height: 62dvh;
+  }
+}

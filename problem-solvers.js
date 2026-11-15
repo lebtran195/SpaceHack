@@ -1,22 +1,388 @@
-'use strict';
+"use strict";
 // Self-paced, hands-on puzzles. Every solution is checked against system state.
-const ProblemSolvers=(()=>{
- function mount(host,kind,onDone){let complete=false,mistakes=0,state={kind};const finish=()=>{if(complete)return;complete=true;host.querySelectorAll('button,input').forEach(b=>b.disabled=true);onDone(Math.max(.55,1-mistakes*.1))};const fail=text=>{mistakes++;status(text);sfx('miss')};host.innerHTML='<div class="solver-scene"></div><p class="solver-feedback" role="status"></p><div class="solver-tools"></div>';const scene=host.querySelector('.solver-scene'),tools=host.querySelector('.solver-tools');const status=text=>host.querySelector('.solver-feedback').textContent=text;function button(label,fn){const b=document.createElement('button');b.type='button';b.className='btn small';b.textContent=label;b.onclick=fn;tools.append(b);return b}
- if(kind==='power'||kind==='negotiation'){
- const political=kind==='negotiation';state.items=political?[['Guidance safety',30,true],['Thermal protection',25,true],['Communications',20,true],['Ceremony',20,false],['Premium cosmetics',25,false]]:[['Guidance computer',25,true],['Cooling pump',20,true],['Radio',20,true],['High-res camera',25,false],['Payload heater',30,false]];state.on=state.items.map(()=>true);state.limit=political?85:80;
- const draw=()=>{const total=state.items.reduce((n,p,i)=>n+(state.on[i]?p[1]:0),0);scene.innerHTML='<p class="solver-intro">'+(political?'Protect essential work while removing optional spending.':'An overloaded bus is browning out. Disconnect nonessential loads while keeping flight control, cooling and radio online.')+'</p><div class="solver-capacity"><span>'+(political?'Committed work':'Power bus')+'</span><b>'+total+' / '+state.limit+' '+(political?'budget units':'W')+'</b><div><i style="width:'+Math.min(100,total/state.limit*100)+'%;background:'+(total>state.limit?'var(--rose)':'var(--cyan)')+'"></i></div></div><div class="solver-components">'+state.items.map((p,i)=>'<button type="button" class="solver-card '+(state.on[i]?'enabled':'')+'" data-load="'+i+'" aria-pressed="'+state.on[i]+'"><b>'+p[0]+'</b><small>'+(state.on[i]?'ON':'OFF')+'</small></button>').join('')+'</div>';scene.querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{state.on[+b.dataset.load]=!state.on[+b.dataset.load];draw()})};draw();button(political?'Present revised plan':'Test restored bus',()=>{if(state.items.some((p,i)=>p[2]&&!state.on[i])){fail('An essential system is disconnected. Protect the mission-critical functions.');return}const total=state.items.reduce((n,p,i)=>n+(state.on[i]?p[1]:0),0);if(total>state.limit){fail('Still overloaded. Disconnect optional work rather than essential systems.');return}status('Stable configuration verified. Essential systems are protected.');finish()});
- }else if(kind==='thermal'){
- state.fault=rand(0,2);state.inspected=new Set();state.selected=null;scene.innerHTML='<p class="solver-intro">One sensor reports overheating, but two nearby probes disagree. Collect independent evidence before taking a system offline.</p><div class="solver-components">'+['A','B','C'].map((n,i)=>'<button class="solver-card" type="button" data-sensor="'+i+'"><b>Probe '+n+'</b><strong>'+(i===state.fault?'124':'26')+' °C</strong><small>Tap to inspect wiring</small></button>').join('')+'</div><div class="solver-evidence" aria-live="polite">No physical inspection yet.</div><div class="solver-choice" aria-label="Choose faulty sensor"></div>';scene.querySelectorAll('[data-sensor]').forEach(b=>b.onclick=()=>{const i=+b.dataset.sensor;state.inspected.add(i);scene.querySelector('.solver-evidence').textContent=i===state.fault?'Probe '+['A','B','C'][i]+': loose connector found. The thermal camera shows a cool board.':'Probe '+['A','B','C'][i]+': wiring intact. Independent camera agrees with this reading.'});const choices=scene.querySelector('.solver-choice');for(let i=0;i<3;i++){const b=document.createElement('button');b.type='button';b.className='btn small';b.textContent='Isolate probe '+['A','B','C'][i];b.onclick=()=>{if(!state.inspected.has(i)){fail('Inspect this probe before isolating it.');return}if(i!==state.fault){fail('This probe agrees with the physical evidence. Check the outlier.');return}status('Faulty probe isolated. Cooling stays online and redundant measurements remain available.');finish()};choices.append(b)}
- }else if(kind==='shield'){
- state.wave=0;state.hazards=shuffle([0,1,2]);state.lane=1;
- const draw=()=>{scene.innerHTML='<p class="solver-intro">Incoming debris appears on radar. Tap a clear corridor to reposition the spacecraft. Protect it through three waves. This is a radar drill, not a literal transfer trajectory.</p><div class="shield-lanes">'+['LEFT','CENTER','RIGHT'].map((name,i)=>'<button type="button" class="shield-lane '+(state.hazards[state.wave]===i?'hazard':'')+'" data-lane="'+i+'"><small>'+name+'</small><b>'+(state.hazards[state.wave]===i?'☄':'·')+'</b><span>'+(state.hazards[state.wave]===i?'DEBRIS FORECAST':'CLEAR CORRIDOR')+'</span></button>').join('')+'</div><p class="solver-evidence">Waves handled '+state.wave+' / 3</p>';scene.querySelectorAll('[data-lane]').forEach(b=>b.onclick=()=>{const lane=+b.dataset.lane;if(lane===state.hazards[state.wave]){fail('That corridor contains debris. Check the radar forecast and try a clear corridor.');return}state.lane=lane;state.wave++;sfx('lock');if(state.wave===3){status('Three debris waves avoided. Safe flight corridor maintained.');finish()}else draw()})};draw();
- }else if(kind==='signal'){
- state.turns=[1,0,0,0,1,1,0,2,1];const base=[[3,1],[3,2],[0,1],[0,2],[0,2],[3,1],[0,1],[0,1],[3,1]],damaged=5;const ports=i=>base[i].map(p=>(p+state.turns[i])%4);const connected=()=>{const seen=new Set();if(!ports(0).includes(3))return seen;let queue=[0];seen.add(0);while(queue.length){const i=queue.shift();for(const d of ports(i)){const row=Math.floor(i/3)+[-1,0,1,0][d],col=i%3+[0,1,0,-1][d],j=row*3+col;if(row<0||row>2||col<0||col>2||j===damaged||seen.has(j)||!ports(j).includes((d+2)%4))continue;seen.add(j);queue.push(j)}}return seen};state.connected=connected;
- const draw=()=>{const live=connected();scene.innerHTML='<p class="solver-intro">Restore the radio path. Tap a tile to rotate its conductor. Connect the transmitter on the upper left to the antenna on the lower right. The damaged tile cannot carry a signal.</p><div class="wire-labels"><b>TX →</b><b>→ ANTENNA</b></div><div class="solver-wires">'+base.map((_,i)=>'<button type="button" class="wire-cell '+(live.has(i)?'live':'')+'" data-wire="'+i+'" aria-label="'+(i===damaged?'Damaged tile': 'Rotate conductor '+(i+1))+'" '+(i===damaged?'disabled':'')+'>'+(i===damaged?'✕':'<svg viewBox="0 0 80 80" aria-hidden="true">'+ports(i).map(d=>'<path d="M40 40L'+[[40,0],[80,40],[40,80],[0,40]][d].join(' ')+'"/>').join('')+'<circle cx="40" cy="40" r="5"/></svg>')+'</button>').join('')+'</div>';scene.querySelectorAll('[data-wire]').forEach(b=>b.onclick=()=>{state.turns[+b.dataset.wire]=(state.turns[+b.dataset.wire]+1)%4;draw()})};draw();button('Test end-to-end link',()=>{if(!connected().has(8)||!ports(8).includes(1)){fail('The circuit is still open. Powered tiles glow cyan; trace from the transmitter.');return}status('Continuity verified. The antenna has a clean path to the transmitter.');finish()});
- }else{
- state.heading=0;state.targets=shuffle([1,2,3]);state.burns=0;const names=['NORTH','EAST','SOUTH','WEST'],arrows=['↑','→','↓','←'];const draw=()=>{scene.innerHTML='<p class="solver-intro">A thruster is fixed to the spacecraft body. Rotate the spacecraft until its thrust arrow matches the commanded direction, then fire a short pulse. Complete three safe corrections.</p><div class="attitude-scene"><div><small>COMMAND</small><b>'+arrows[state.targets[state.burns]]+'</b><span>'+names[state.targets[state.burns]]+'</span></div><div><small>SPACECRAFT THRUST</small><b>'+arrows[state.heading]+'</b><span>'+names[state.heading]+'</span></div></div><p class="solver-evidence">Corrections completed '+state.burns+' / 3</p>'};draw();button('↶ Rotate left',()=>{state.heading=(state.heading+3)%4;draw()});button('Rotate right ↷',()=>{state.heading=(state.heading+1)%4;draw()});button('Fire short pulse',()=>{if(state.heading!==state.targets[state.burns]){fail('Wrong direction. Rotate the thrust arrow before spending propellant.');return}state.burns++;if(state.burns===3){status('Three corrections completed without an unsafe burn.');finish()}else draw()});
- }
- return{state,get completed(){return complete}};
- }
- return{mount};
+const ProblemSolvers = (() => {
+  function mount(host, kind, onDone) {
+    let complete = false,
+      mistakes = 0,
+      state = { kind };
+    const finish = () => {
+      if (complete) return;
+      complete = true;
+      host.querySelectorAll("button,input").forEach((b) => (b.disabled = true));
+      onDone(Math.max(0.55, 1 - mistakes * 0.1));
+    };
+    const fail = (text) => {
+      mistakes++;
+      status(text);
+      sfx("miss");
+    };
+    host.innerHTML =
+      '<div class="solver-scene"></div><p class="solver-feedback" role="status"></p><div class="solver-tools"></div>';
+    const scene = host.querySelector(".solver-scene"),
+      tools = host.querySelector(".solver-tools");
+    const status = (text) =>
+      (host.querySelector(".solver-feedback").textContent = text);
+    function button(label, fn) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn small";
+      b.textContent = label;
+      b.onclick = fn;
+      tools.append(b);
+      return b;
+    }
+    if (kind === "power" || kind === "negotiation") {
+      const political = kind === "negotiation";
+      state.items = political
+        ? [
+            ["Guidance safety", 30, true],
+            ["Thermal protection", 25, true],
+            ["Communications", 20, true],
+            ["Ceremony", 20, false],
+            ["Premium cosmetics", 25, false],
+          ]
+        : [
+            ["Guidance computer", 25, true],
+            ["Cooling pump", 20, true],
+            ["Radio", 20, true],
+            ["High-res camera", 25, false],
+            ["Payload heater", 30, false],
+          ];
+      state.on = state.items.map(() => true);
+      state.limit = political ? 85 : 80;
+      const draw = () => {
+        const total = state.items.reduce(
+          (n, p, i) => n + (state.on[i] ? p[1] : 0),
+          0,
+        );
+        scene.innerHTML =
+          '<p class="solver-intro">' +
+          (political
+            ? "Protect essential work while removing optional spending."
+            : "An overloaded bus is browning out. Disconnect nonessential loads while keeping flight control, cooling and radio online.") +
+          '</p><div class="solver-capacity"><span>' +
+          (political ? "Committed work" : "Power bus") +
+          "</span><b>" +
+          total +
+          " / " +
+          state.limit +
+          " " +
+          (political ? "budget units" : "W") +
+          '</b><div><i style="width:' +
+          Math.min(100, (total / state.limit) * 100) +
+          "%;background:" +
+          (total > state.limit ? "var(--rose)" : "var(--cyan)") +
+          '"></i></div></div><div class="solver-components">' +
+          state.items
+            .map(
+              (p, i) =>
+                '<button type="button" class="solver-card ' +
+                (state.on[i] ? "enabled" : "") +
+                '" data-load="' +
+                i +
+                '" aria-pressed="' +
+                state.on[i] +
+                '"><b>' +
+                p[0] +
+                "</b><small>" +
+                (state.on[i] ? "ON" : "OFF") +
+                "</small></button>",
+            )
+            .join("") +
+          "</div>";
+        scene.querySelectorAll("[data-load]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              state.on[+b.dataset.load] = !state.on[+b.dataset.load];
+              draw();
+            }),
+        );
+      };
+      draw();
+      button(political ? "Present revised plan" : "Test restored bus", () => {
+        if (state.items.some((p, i) => p[2] && !state.on[i])) {
+          fail(
+            "An essential system is disconnected. Protect the mission-critical functions.",
+          );
+          return;
+        }
+        const total = state.items.reduce(
+          (n, p, i) => n + (state.on[i] ? p[1] : 0),
+          0,
+        );
+        if (total > state.limit) {
+          fail(
+            "Still overloaded. Disconnect optional work rather than essential systems.",
+          );
+          return;
+        }
+        status(
+          "Stable configuration verified. Essential systems are protected.",
+        );
+        finish();
+      });
+    } else if (kind === "thermal") {
+      state.fault = rand(0, 2);
+      state.inspected = new Set();
+      state.selected = null;
+      scene.innerHTML =
+        '<p class="solver-intro">One sensor reports overheating, but two nearby probes disagree. Collect independent evidence before taking a system offline.</p><div class="solver-components">' +
+        ["A", "B", "C"]
+          .map(
+            (n, i) =>
+              '<button class="solver-card" type="button" data-sensor="' +
+              i +
+              '"><b>Probe ' +
+              n +
+              "</b><strong>" +
+              (i === state.fault ? "124" : "26") +
+              " °C</strong><small>Tap to inspect wiring</small></button>",
+          )
+          .join("") +
+        '</div><div class="solver-evidence" aria-live="polite">No physical inspection yet.</div><div class="solver-choice" aria-label="Choose faulty sensor"></div>';
+      scene.querySelectorAll("[data-sensor]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const i = +b.dataset.sensor;
+            state.inspected.add(i);
+            scene.querySelector(".solver-evidence").textContent =
+              i === state.fault
+                ? "Probe " +
+                  ["A", "B", "C"][i] +
+                  ": loose connector found. The thermal camera shows a cool board."
+                : "Probe " +
+                  ["A", "B", "C"][i] +
+                  ": wiring intact. Independent camera agrees with this reading.";
+          }),
+      );
+      const choices = scene.querySelector(".solver-choice");
+      for (let i = 0; i < 3; i++) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "btn small";
+        b.textContent = "Isolate probe " + ["A", "B", "C"][i];
+        b.onclick = () => {
+          if (!state.inspected.has(i)) {
+            fail("Inspect this probe before isolating it.");
+            return;
+          }
+          if (i !== state.fault) {
+            fail(
+              "This probe agrees with the physical evidence. Check the outlier.",
+            );
+            return;
+          }
+          status(
+            "Faulty probe isolated. Cooling stays online and redundant measurements remain available.",
+          );
+          finish();
+        };
+        choices.append(b);
+      }
+    } else if (kind === "shield") {
+      state.wave = 0;
+      state.hazards = shuffle([0, 1, 2]);
+      state.lane = 1;
+      const draw = () => {
+        scene.innerHTML =
+          '<p class="solver-intro">Incoming debris appears on radar. Tap a clear corridor to reposition the spacecraft. Protect it through three waves. This is a radar drill, not a literal transfer trajectory.</p><div class="shield-lanes">' +
+          ["LEFT", "CENTER", "RIGHT"]
+            .map(
+              (name, i) =>
+                '<button type="button" class="shield-lane ' +
+                (state.hazards[state.wave] === i ? "hazard" : "") +
+                '" data-lane="' +
+                i +
+                '"><small>' +
+                name +
+                "</small><b>" +
+                (state.hazards[state.wave] === i ? "☄" : "·") +
+                "</b><span>" +
+                (state.hazards[state.wave] === i
+                  ? "DEBRIS FORECAST"
+                  : "CLEAR CORRIDOR") +
+                "</span></button>",
+            )
+            .join("") +
+          '</div><p class="solver-evidence">Waves handled ' +
+          state.wave +
+          " / 3</p>";
+        scene.querySelectorAll("[data-lane]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              const lane = +b.dataset.lane;
+              if (lane === state.hazards[state.wave]) {
+                fail(
+                  "That corridor contains debris. Check the radar forecast and try a clear corridor.",
+                );
+                return;
+              }
+              state.lane = lane;
+              state.wave++;
+              sfx("lock");
+              if (state.wave === 3) {
+                status(
+                  "Three debris waves avoided. Safe flight corridor maintained.",
+                );
+                finish();
+              } else draw();
+            }),
+        );
+      };
+      draw();
+    } else if (kind === "signal") {
+      state.turns = [1, 0, 0, 0, 1, 1, 0, 2, 1];
+      const base = [
+          [3, 1],
+          [3, 2],
+          [0, 1],
+          [0, 2],
+          [0, 2],
+          [3, 1],
+          [0, 1],
+          [0, 1],
+          [3, 1],
+        ],
+        damaged = 5;
+      const ports = (i) => base[i].map((p) => (p + state.turns[i]) % 4);
+      const connected = () => {
+        const seen = new Set();
+        if (!ports(0).includes(3)) return seen;
+        let queue = [0];
+        seen.add(0);
+        while (queue.length) {
+          const i = queue.shift();
+          for (const d of ports(i)) {
+            const row = Math.floor(i / 3) + [-1, 0, 1, 0][d],
+              col = (i % 3) + [0, 1, 0, -1][d],
+              j = row * 3 + col;
+            if (
+              row < 0 ||
+              row > 2 ||
+              col < 0 ||
+              col > 2 ||
+              j === damaged ||
+              seen.has(j) ||
+              !ports(j).includes((d + 2) % 4)
+            )
+              continue;
+            seen.add(j);
+            queue.push(j);
+          }
+        }
+        return seen;
+      };
+      state.connected = connected;
+      const draw = () => {
+        const live = connected();
+        scene.innerHTML =
+          '<p class="solver-intro">Restore the radio path. Tap a tile to rotate its conductor. Connect the transmitter on the upper left to the antenna on the lower right. The damaged tile cannot carry a signal.</p><div class="wire-labels"><b>TX →</b><b>→ ANTENNA</b></div><div class="solver-wires">' +
+          base
+            .map(
+              (_, i) =>
+                '<button type="button" class="wire-cell ' +
+                (live.has(i) ? "live" : "") +
+                '" data-wire="' +
+                i +
+                '" aria-label="' +
+                (i === damaged
+                  ? "Damaged tile"
+                  : "Rotate conductor " + (i + 1)) +
+                '" ' +
+                (i === damaged ? "disabled" : "") +
+                ">" +
+                (i === damaged
+                  ? "✕"
+                  : '<svg viewBox="0 0 80 80" aria-hidden="true">' +
+                    ports(i)
+                      .map(
+                        (d) =>
+                          '<path d="M40 40L' +
+                          [
+                            [40, 0],
+                            [80, 40],
+                            [40, 80],
+                            [0, 40],
+                          ][d].join(" ") +
+                          '"/>',
+                      )
+                      .join("") +
+                    '<circle cx="40" cy="40" r="5"/></svg>') +
+                "</button>",
+            )
+            .join("") +
+          "</div>";
+        scene.querySelectorAll("[data-wire]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              state.turns[+b.dataset.wire] =
+                (state.turns[+b.dataset.wire] + 1) % 4;
+              draw();
+            }),
+        );
+      };
+      draw();
+      button("Test end-to-end link", () => {
+        if (!connected().has(8) || !ports(8).includes(1)) {
+          fail(
+            "The circuit is still open. Powered tiles glow cyan; trace from the transmitter.",
+          );
+          return;
+        }
+        status(
+          "Continuity verified. The antenna has a clean path to the transmitter.",
+        );
+        finish();
+      });
+    } else {
+      state.heading = 0;
+      state.targets = shuffle([1, 2, 3]);
+      state.burns = 0;
+      const names = ["NORTH", "EAST", "SOUTH", "WEST"],
+        arrows = ["↑", "→", "↓", "←"];
+      const draw = () => {
+        scene.innerHTML =
+          '<p class="solver-intro">A thruster is fixed to the spacecraft body. Rotate the spacecraft until its thrust arrow matches the commanded direction, then fire a short pulse. Complete three safe corrections.</p><div class="attitude-scene"><div><small>COMMAND</small><b>' +
+          arrows[state.targets[state.burns]] +
+          "</b><span>" +
+          names[state.targets[state.burns]] +
+          "</span></div><div><small>SPACECRAFT THRUST</small><b>" +
+          arrows[state.heading] +
+          "</b><span>" +
+          names[state.heading] +
+          '</span></div></div><p class="solver-evidence">Corrections completed ' +
+          state.burns +
+          " / 3</p>";
+      };
+      draw();
+      button("↶ Rotate left", () => {
+        state.heading = (state.heading + 3) % 4;
+        draw();
+      });
+      button("Rotate right ↷", () => {
+        state.heading = (state.heading + 1) % 4;
+        draw();
+      });
+      button("Fire short pulse", () => {
+        if (state.heading !== state.targets[state.burns]) {
+          fail(
+            "Wrong direction. Rotate the thrust arrow before spending propellant.",
+          );
+          return;
+        }
+        state.burns++;
+        if (state.burns === 3) {
+          status("Three corrections completed without an unsafe burn.");
+          finish();
+        } else draw();
+      });
+    }
+    return {
+      state,
+      get completed() {
+        return complete;
+      },
+    };
+  }
+  return { mount };
 })();
